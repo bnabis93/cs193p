@@ -12,12 +12,24 @@ struct MemoryGame<CardContent> {
     //해당 model이 무엇을 하는지에 대해 먼저 생각하고 정의하라
     var cards : Array<Card>
     
-    func choose(card : Card) -> Void {
+    mutating func choose(card : Card) -> Void {
+        // function argument는 기본적으로 let으로 취급된다. 들어올때 copy되서 들어온다
         print("card chosen: \(card) ")
+        let choosenIndex : Int = self.index(of : card)
+        self.cards[choosenIndex].isFaceUp = !self.cards[choosenIndex].isFaceUp //self itself immutatable....;;
+    }
+    
+    func index(of card : Card) -> Int {
+        for index in 0..<self.cards.count{
+            if self.cards[index].id == card.id{
+                return index
+            }
+        }
+        return 0 //TODO: bogus
     }
     
     //MARK: -init
-    init(numberOfPairsOfCards : Int, cardContentFactory : (Int) -> CardContent) {
+    init(numberOfPairsOfCards : Int, cardContentFactory : (Int) -> CardContent) { //init is implicity mutating
         cards = Array<Card>()
         for pairIndex in 0..<numberOfPairsOfCards{
             let content = cardContentFactory(pairIndex) // non mutate variable (change)

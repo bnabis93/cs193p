@@ -32,8 +32,8 @@ import SwiftUI //UI는 언쓸건데 일단 선언함
 //}
 
 
-class EmojiMemoryGame {
-    private var model : MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
+class EmojiMemoryGame : ObservableObject{
+    @Published private var model : MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     // MemoryGame<String>(numberOfPairsOfCards: 2, cardContentFactory: {_ in "🌊"})
     // equal to : cardContentFactory: {(pairIndex : Int ) in return "🌊"}
     //이미 type 다 지정해놔서 type inference 함
@@ -54,6 +54,7 @@ class EmojiMemoryGame {
     // MARK: - Intent(s)
     
     func choose(card: MemoryGame<String>.Card){
+        //objectWillChange.send()
         model.choose(card: card)
     }
 }
