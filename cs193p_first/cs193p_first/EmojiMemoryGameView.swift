@@ -11,11 +11,9 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel : EmojiMemoryGame
     
     var body: some View {
-        HStack{
-            ForEach(viewModel.cards){ card in
-                CardView(card: card).onTapGesture {
-                    self.viewModel.choose(card: card)
-                }
+        Grid(items : viewModel.cards){ card in
+            CardView(card: card).onTapGesture {
+                self.viewModel.choose(card: card)
             }
         }
         .padding() //MARK : tell every view inside of me to use padding!
