@@ -15,17 +15,8 @@ struct MemoryGame<CardContent> {
     mutating func choose(card : Card) -> Void {
         // function argument는 기본적으로 let으로 취급된다. 들어올때 copy되서 들어온다
         print("card chosen: \(card) ")
-        let choosenIndex : Int = self.index(of : card)
+        let choosenIndex : Int = cards.firstIndex(matching: card)
         self.cards[choosenIndex].isFaceUp = !self.cards[choosenIndex].isFaceUp //self itself immutatable....;;
-    }
-    
-    func index(of card : Card) -> Int {
-        for index in 0..<self.cards.count{
-            if self.cards[index].id == card.id{
-                return index
-            }
-        }
-        return 0 //TODO: bogus
     }
     
     //MARK: -init
