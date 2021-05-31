@@ -8,15 +8,32 @@
 
 import Foundation
 
-struct MemoryGame<CardContent> {
+struct MemoryGame<CardContent> where CardContent : Equatable {
     //해당 model이 무엇을 하는지에 대해 먼저 생각하고 정의하라
     var cards : Array<Card>
+    var indexOfTheOneAndOnlyFaceUpCard : Int?{
+        get { cards.indices.filter {cards[$0].isFaceUp }.only}
+        set{
+            for index in cards.indices{
+                    cards[index].isFaceUp = index == newValue
+            }
+        }
+    }
     
     mutating func choose(card : Card) -> Void {
         // function argument는 기본적으로 let으로 취급된다. 들어올때 copy되서 들어온다
-        print("card chosen: \(card) ")
-        let choosenIndex : Int = cards.firstIndex(matching: card)
-        self.cards[choosenIndex].isFaceUp = !self.cards[choosenIndex].isFaceUp //self itself immutatable....;;
+        if  let choosenIndex = cards.firstIndex(matching: card) , !cards[choosenIndex].isFaceUp , !cards[choosenIndex].isMatched{
+            
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[choosenIndex].content == cards[potentialMatchIndex].content{
+                    cards[choosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                self.cards[choosenIndex].isFaceUp = true
+            } else{
+                indexOfTheOneAndOnlyFaceUpCard = choosenIndex
+            }
+        }
     }
     
     //MARK: -init
